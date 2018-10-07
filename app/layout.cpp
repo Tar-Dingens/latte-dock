@@ -1765,7 +1765,7 @@ bool Layout::dockViewExists(Plasma::Containment *containment)
     return m_dockViews.keys().contains(containment);
 }
 
-QList<Plasma::Types::Location> Layout::freeEdges(QScreen *screen) const
+QList<Plasma::Types::Location> Layout::freeEdges(QScreen *scr) const
 {
     using Plasma::Types;
     QList<Types::Location> edges{Types::BottomEdge, Types::LeftEdge,
@@ -1776,7 +1776,8 @@ QList<Plasma::Types::Location> Layout::freeEdges(QScreen *screen) const
     }
 
     foreach (auto view, m_dockViews) {
-        if (view && view->currentScreen() == screen->name()) {
+        //! make sure that freeEdges takes into account only views that have completed their placement
+        if (view && view->currentScreen() == scr->name() && view->geometry().intersects(scr->geometry())) {
             edges.removeOne(view->location());
         }
     }
@@ -1797,7 +1798,8 @@ QList<Plasma::Types::Location> Layout::freeEdges(int screen) const
     QScreen *scr = m_corona->screenPool()->screenForId(screen);
 
     foreach (auto view, m_dockViews) {
-        if (view && scr && view->currentScreen() == scr->name()) {
+        //! make sure that freeEdges takes into account only views that have completed their placement
+        if (view && scr && view->currentScreen() == scr->name() && view->geometry().intersects(scr->geometry())) {
             edges.removeOne(view->location());
         }
     }
