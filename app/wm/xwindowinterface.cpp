@@ -363,14 +363,11 @@ void XWindowInterface::requestMoveWindow(WindowId wid, QPoint from) const
         return;
     }
 
-    int borderX{wInfo.geometry().width() > 120 ? 60 : 10};
-    int borderY{10};
-
     //! find min/max values for x,y based on active window geometry
-    int minX = wInfo.geometry().x() + borderX;
-    int maxX = wInfo.geometry().x() + wInfo.geometry().width() - borderX;
-    int minY = wInfo.geometry().y() + borderY;
-    int maxY = wInfo.geometry().y() + wInfo.geometry().height() - borderY;
+    int minX = wInfo.geometry().x();
+    int maxX = wInfo.geometry().x() + wInfo.geometry().width();
+    int minY = wInfo.geometry().y();
+    int maxY = wInfo.geometry().y() + wInfo.geometry().height();
 
     //! set the point from which this window will be moved,
     //! make sure that it is in window boundaries

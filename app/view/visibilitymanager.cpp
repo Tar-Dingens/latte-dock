@@ -1134,6 +1134,17 @@ void VisibilityManager::deleteEdgeGhostWindow()
 }
 
 //! Window Functions
+void VisibilityManager::changeCursorShape()
+{
+    if (QGuiApplication::overrideCursor() == 0) {
+        QGuiApplication::setOverrideCursor(Qt::SizeAllCursor);
+    }
+}
+
+void VisibilityManager::restoreCursorShape() {
+    QGuiApplication::restoreOverrideCursor();
+}
+
 void VisibilityManager::requestToggleMaximizeForActiveWindow()
 {
     WindowInfoWrap actInfo = wm->requestInfoActive();

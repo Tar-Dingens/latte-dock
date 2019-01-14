@@ -119,6 +119,8 @@ public slots:
     Q_INVOKABLE void requestToggleMaximizeForActiveWindow();
     Q_INVOKABLE void requestMoveActiveWindow(int localX, int localY);
     Q_INVOKABLE bool activeWindowCanBeDragged();
+    Q_INVOKABLE void changeCursorShape();
+    Q_INVOKABLE void restoreCursorShape();
 
 signals:
     void mustBeShown();

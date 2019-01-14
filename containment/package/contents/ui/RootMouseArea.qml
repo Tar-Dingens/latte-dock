@@ -51,6 +51,13 @@ MouseArea{
     onReleased: {
         lastPressX = -1;
         lastPressY = -1;
+        latteView.visibility.restoreCursorShape();
+    }
+
+    onExited: {
+        if (pressed && latteView.visibility.activeWindowCanBeDragged()) {
+            activateDragging();
+        }
     }
 
     onPositionChanged: {
@@ -62,7 +69,7 @@ MouseArea{
 
         if ( tryDrag && latteView.visibility.activeWindowCanBeDragged()) {
             drawWindowTimer.stop();
-            activateDragging();
+            latteView.visibility.changeCursorShape(); //activateDragging();
         }
     }
 
@@ -84,7 +91,7 @@ MouseArea{
         interval: 500
         onTriggered: {
             if (mainArea.pressed && latteView.visibility.activeWindowCanBeDragged()) {
-                mainArea.activateDragging();
+                latteView.visibility.changeCursorShape();//mainArea.activateDragging();
             }
         }
     }
@@ -96,6 +103,7 @@ MouseArea{
             latteView.restoreGrabItemBehavior();
             mainArea.lastPressX = -1;
             mainArea.lastPressY = -1;
+            latteView.visibility.restoreCursorShape();
         }
     }
 }
