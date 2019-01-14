@@ -1147,11 +1147,13 @@ void VisibilityManager::restoreCursorShape() {
 
 void VisibilityManager::requestToggleMaximizeForActiveWindow()
 {
-    WindowInfoWrap actInfo = wm->requestInfoActive();
+    if (m_latteView->location() == Plasma::Types::TopEdge) {
+        WindowInfoWrap actInfo = wm->requestInfoActive();
 
-    //active window can be toggled only when it is in the same screen
-    if (actInfo.isValid() && !actInfo.geometry().isNull() && m_latteView->screenGeometry().contains(actInfo.geometry().center())) {
-        wm->requestToggleMaximized(actInfo.wid());
+        //active window can be toggled only when it is in the same screen
+        if (actInfo.isValid() && !actInfo.geometry().isNull() && actInfo.isMaximized() && m_latteView->screenGeometry().contains(actInfo.geometry().center())) {
+            wm->requestToggleMaximized(actInfo.wid());
+        }
     }
 }
 
@@ -1160,7 +1162,7 @@ void VisibilityManager::requestMoveActiveWindow(int localX, int localY)
     WindowInfoWrap actInfo = wm->requestInfoActive();
 
     //active window can be dragged only when it is in the same screen
-    if (actInfo.isValid() && !actInfo.geometry().isNull() && m_latteView->screenGeometry().contains(actInfo.geometry().center())) {
+    if (actInfo.isValid() && !actInfo.geometry().isNull() && actInfo.isMaximized() && m_latteView->screenGeometry().contains(actInfo.geometry().center())) {
         QPoint globalPoint{m_latteView->x() + localX, m_latteView->y() + localY};
 
         wm->requestMoveWindow(actInfo.wid(), globalPoint);
@@ -1178,13 +1180,14 @@ void VisibilityManager::requestMoveActiveWindow(int localX, int localY)
 
 bool VisibilityManager::activeWindowCanBeDragged()
 {
-    WindowInfoWrap actInfo = wm->requestInfoActive();
+    if (m_latteView->location() == Plasma::Types::TopEdge) {
+        WindowInfoWrap actInfo = wm->requestInfoActive();
 
-    //active window can be dragged only when it is in the same screen
-    if (actInfo.isValid() && !actInfo.geometry().isNull() && m_latteView->screenGeometry().contains(actInfo.geometry().center())) {
-        return wm->windowCanBeDragged(actInfo.wid());
+        //active window can be dragged only when it is in the same screen
+        if (actInfo.isValid() && !actInfo.geometry().isNull() && actInfo.isMaximized() && m_latteView->screenGeometry().contains(actInfo.geometry().center())) {
+            return wm->windowCanBeDragged(actInfo.wid());
+        }
     }
-
     return false;
 }
 
